@@ -19,6 +19,21 @@ WHERE NOT EXISTS (
     WHERE b.vehicle_id = v.vehicle_id
 );
 
+-- WHERE
+SELECT *
+FROM Vehicles
+WHERE status = 'available'
+AND type = 'car';
+
+-- GROUP BY and HAVING
+SELECT 
+    v.name AS vehicle_name,
+    COUNT(b.booking_id) AS total_bookings
+FROM Vehicles v
+INNER JOIN Bookings b ON v.vehicle_id = b.vehicle_id
+GROUP BY v.name
+HAVING COUNT(b.booking_id) > 2;
+
 
 
 
