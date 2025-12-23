@@ -69,16 +69,70 @@ Stores booking information connecting users and vehicles.
 ---
 
 ## 🧪 SQL Queries
-The project includes SQL queries that demonstrate:
-- Retrieving booking details using JOIN
-- Finding vehicles never booked using NOT EXISTS
-- Filtering vehicles using WHERE
-- Aggregating booking data using GROUP BY and HAVING
 
-All queries are provided in the `queries.sql` file.
+The project includes SQL queries that demonstrate core SQL concepts such as JOIN, NOT EXISTS, WHERE, GROUP BY, and HAVING.
 
 ---
 
-## ✅ Conclusion
-This project follows proper relational database principles .  
-It clearly demonstrates understanding of constraints, and advanced SQL querying techniques.
+### 🔹 Query 1: Retrieve Booking Details Using JOIN
+
+```sql
+SELECT 
+    b.booking_id,
+    u.name AS customer_name,
+    v.name AS vehicle_name,
+    b.start_date,
+    b.end_date,
+    b.status
+FROM Bookings b
+INNER JOIN Users u ON b.user_id = u.user_id
+INNER JOIN Vehicles v ON b.vehicle_id = v.vehicle_id;
+```
+Explanation:
+This query uses INNER JOIN to combine data from the Bookings, Users, and Vehicles tables.
+It retrieves booking information along with the corresponding customer name and vehicle name.
+Only records with matching user and vehicle IDs are returned.
+
+
+### 🔹 Query 2: Find Vehicles That Have Never Been Booked (NOT EXISTS)
+```sql
+SELECT *
+FROM Vehicles v
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Bookings b
+    WHERE b.vehicle_id = v.vehicle_id
+);
+```
+Explanation:
+This query uses the NOT EXISTS clause to identify vehicles that do not appear in the Bookings table.
+It returns vehicles that have never been booked, helping to identify unused vehicles.
+
+
+### 🔹 Query 3: Filter Available Vehicles Using WHERE
+```sql
+SELECT *
+FROM Vehicles
+WHERE status = 'available'
+AND type = 'car';
+```
+Explanation:
+This query filters records using the WHERE clause.
+It retrieves all vehicles that are currently available and belong to a specific type, such as cars. 
+
+
+### 🔹 Query 4: Aggregate Booking Data Using GROUP BY and HAVING
+```sql
+SELECT 
+    v.name AS vehicle_name,
+    COUNT(b.booking_id) AS total_bookings
+FROM Vehicles v
+INNER JOIN Bookings b ON v.vehicle_id = b.vehicle_id
+GROUP BY v.name
+HAVING COUNT(b.booking_id) > 2;
+```
+Explanation:
+This query groups booking records by vehicle name and counts the total number of bookings for each vehicle.
+The HAVING clause filters the grouped results and displays only vehicles with more than two bookings.
+
+---
